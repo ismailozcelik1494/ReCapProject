@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Business.Abstract;
+﻿using Business.Abstract;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
@@ -13,100 +13,86 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CarsController : ControllerBase
     {
-        ICarService _iCarService;
-        public CarsController(ICarService iCarService)
+        ICarService _carService;
+
+        public CarsController(ICarService carService)
         {
-            _iCarService = iCarService;
+            _carService = carService;
         }
-       
+
+        [HttpPost("add")]
+        public IActionResult Add(Car car)
+        {
+            var result = _carService.Add(car);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("delete")]
+        public IActionResult Delete(Car car)
+        {
+            var result = _carService.Delete(car);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("update")]
+        public IActionResult Update(Car car)
+        {
+            var result = _carService.Update(car);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
-            var result = _iCarService.GetAll();
+            var result = _carService.GetAll();
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            else
-            {
-                return BadRequest(result.Message);
-            }
+            return BadRequest(result);
         }
 
-        [HttpGet("getbybrandid")]
-        public IActionResult GetByBrandId(int id)
+        [HttpGet("getcarsbybrandid")]
+        public IActionResult GetCarsByBrandId(int id)
         {
-            var result = _iCarService.GetCarsByBrandId(id);
+            var result = _carService.GetCarsByBrandId(id);
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            else
-            {
-             return BadRequest(result.Message);       
-            }
-            
+            return BadRequest(result);
         }
-        [HttpGet("getbycolorid")]
-        public IActionResult GetByColorId(int id)
+        [HttpGet("getcarsbycolorid")]
+        public IActionResult GetCarsByColorId(int id)
         {
-            var result = _iCarService.GetCarsByColorId(id);
+            var result = _carService.GetCarsByColorId(id);
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            else
-            {
-                return BadRequest(result.Message);
-            }
-
+            return BadRequest(result);
         }
         [HttpGet("getcardetails")]
         public IActionResult GetCarDetails()
         {
-            var result = _iCarService.GetCarDetails();
+            var result = _carService.GetCarDetails();
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok(result);
             }
-            else
-            {
-                return BadRequest(result.Message);
-            }
+            return BadRequest(result);
         }
-
-        [HttpPost("caradd")]
-        public IActionResult Add(Car car)
-        {
-            var result = _iCarService.Add(car);
-            if (result.Success)
-            {
-                return Ok(result.Message);
-            }
-            else
-            {
-                return BadRequest(result.Message);
-            }
-
-        }
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
